@@ -1,7 +1,7 @@
 # shrumsowen11
-********************************** CLICK oN RAW OR BLAME IN THE TAB IN THE RIGHT TOP OF THIS FORM **************************************
+************************* CLICK ON RAW OR BLAME IN THE TAB IN THE RIGHT TOP OF THIS FORM ******************************
 
-*************************************************** Github Repository Operations *******************************************************
+**************************************** Github Repository Operations **************************************
 
 First create a new repository in your GitHub using the GitHub Web Interface 
 
