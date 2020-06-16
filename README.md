@@ -10,7 +10,6 @@ Checking which files in the directory are staged/tracked or not
 
                 git status
 
-
 After staging, we add files which are staged
 
                 git add <fileNames>		->> just for that filename or
@@ -74,3 +73,21 @@ Push an existing repository from the command line
 Create a new file on the command line
                 touch newFile.md
 
+
+***********************************************************************************************
+
+Restoring all the files in the directory which were pulled from an external git repository:
+
+                git restore . 
+
+ERROR:
+From https://github.com/JavaHunk2020/cubic-bank
+   38e6738..399f3a9  Feature-NK/TK-2929-Change-Pass -> origin/Feature-NK/TK-2929-Change-Pass
+error: Your local changes to the following files would be overwritten by merge:
+        banking-web/src/main/java/com/rab3tech/customer/ui/controller/CustomerUIController.java
+        banking-web/src/main/resources/application.properties
+Please commit your changes or stash them before you merge.
+Aborting
+Updating 3407a9a..399f3a9
+
+***********************************************************************************************
