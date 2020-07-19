@@ -18,7 +18,9 @@ After staging, we add files which are staged
 After adding, we commit those added files on the command line
 
                 git commit -m "first commit"
+After commiting, if you want to unstage or uncommit:
 
+		git reset
 In order to make sure the committed files are there on the command line
 
                  git log
@@ -31,7 +33,7 @@ This might ask for your password
 
 
 
-
+***********************************************************************************************************************
  
 Reinitializing the directory in GitHub/Create a new repository on the command line
 
@@ -49,36 +51,79 @@ Reinitializing the directory in GitHub/Create a new repository on the command li
                 git push -u origin master
 
 
+***********************************************************************************************************************
+
 What exactly happens when you are trying to push and this error is there?
 
 ! [rejected]        master -> master (fetch first)
 error: failed to push some refs to 'https://github.com/shrumsowen11/testing.git'
 ->> When trying to push and this error show up, this means you or someone has edited the repository in the website after your last edits and you might have forgotten about that. When this happens, do not do the git push –force, this might give troubles in the future. So, do this
+
                 git fetch origin master
                 git pull origin master		                  and then 
                 git push
 
+***********************************************************************************************************************
+
 What exactly happens when you do this?
+
                 git remote add origin https://github.com/shrumsowen11/shrumsowen11.git
-->> Using in the cmd prompt, this will actually create the “origin”[Your GitHub Original Primary URL] as https://github.com/shrumsowen11/shrumsowen11.git link and the “git remote add” means, you are trying to add the committed files from your local repository(.git) in your computer to your remote GitHub repository(whichever is made there), for this case “shrumsowen11”.
+		
+->> Using in the cmd prompt, this will actually create the “origin”[Your GitHub Original Primary URL] as https://github.com/shrumsowen11/shrumsowen11.git link and the 
+
+		git remote add
+		
+means, you are trying to add the committed files from your local repository(.git) in your computer to your remote GitHub repository(whichever is made there), for this case “shrumsowen11”.
+
+***********************************************************************************************************************
 
 If you would like to change/Set the “origin” into a different link(URL)
+
                 git remote set-url origin https://github.com/your/repository
 
-
 Push an existing repository from the command line
+
                 git remote add origin https://github.com/shrumsowen11/shrumsowen11.git
                 git push -u origin master
-
+***********************************************************************************************************************
 Create a new file on the command line
-                touch newFile.md
 
+                touch newFile.md
+***********************************************************************************************************************
+Create a new file TO EDIT on the command line
+		
+		vim FILENAME
+For saving and closing this:
+		
+		!qw  or wq!  --> this is write quit !-> force
+***********************************************************************************************************************
+In order to merge the edits from your local(from your branch) to the master(remote):
+
+		git branch   --> shows all the branch in the github
+		git pull     --> shows the details, also the hidden branches which are just made
+->> Most of the time, you will want to merge a branch with the current active branch and you can do so by passing in the branch name.
+->> Goto master branch
+		
+		git checkout master
+->> now, either
+	
+		git merge master <branchName>       or        git merge master
+***********************************************************************************************************************
+Deleting a branch via command line:
+		
+		gir branch -d <branchName>
+		
+***********************************************************************************************************************
+Creating a new branch via command line:
+
+		git checkout -b <branch>
+--> Simply, we can goto our github account and start writing the branch name in the project repo where we want a new branch
 
 ********************************************************************************************************************************************************************************************************************************************************************************
-
 Restoring all the files in the directory which were pulled from an external git repository:
 
                 git restore . 
+		
 
 ERROR:
 From https://github.com/JavaHunk2020/cubic-bank
@@ -91,3 +136,6 @@ Aborting
 Updating 3407a9a..399f3a9
 
 ********************************************************************************************************************************************************************************************************************************************************************************
+
+
+
