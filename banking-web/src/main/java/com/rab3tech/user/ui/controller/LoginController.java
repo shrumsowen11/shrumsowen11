@@ -5,7 +5,6 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpSession;
 
@@ -19,7 +18,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.rab3tech.customer.service.LoginService;
-import com.rab3tech.customer.service.impl.SecurityQuestionService;
+import com.rab3tech.customer.service.SecurityQuestionService;
 import com.rab3tech.vo.CustomerSecurityQueAnsVO;
 import com.rab3tech.vo.LoginVO;
 import com.rab3tech.vo.SecurityQuestionsVO;
@@ -33,6 +32,11 @@ public class LoginController {
 	@Autowired
 	private SecurityQuestionService securityQuestionService;
 	
+	/*
+	 * @Autowired private CustomerAccountService customerAccountService;
+	 * 
+	 */
+	
 	@GetMapping(value= {"/customer/login","/logout/success"})
 	public String showCustomerLogin(@RequestParam(value="error",required=false) boolean messsage,Model model) {
 		  if(messsage) {
@@ -42,7 +46,7 @@ public class LoginController {
 	}	
 	
 	
-
+   
 	@GetMapping(value= {"/access/denied"})
 	public String accessDenied(Model model) {
 			return "customer/accessDenied";	//accessDenied.html
@@ -81,7 +85,7 @@ public class LoginController {
 							viewName="customer/securityQuestion";
 							CustomerSecurityQueAnsVO customerSecurityQueAnsVO=new CustomerSecurityQueAnsVO();
 							List<SecurityQuestionsVO> questionsVOs=securityQuestionService.findAll();
-							Collections.shuffle(questionsVOs);
+							Collections.shuffle(questionsVOs);  //yesko kamm cahina ahiel ta
 							customerSecurityQueAnsVO.setQuestionsVOs(questionsVOs);
 							
 							List<SecurityQuestionsVO> questionsVOs1=questionsVOs.subList(0, questionsVOs.size()/2);
@@ -90,6 +94,17 @@ public class LoginController {
 							model.addAttribute("questionsVOs2", questionsVOs2);
 							model.addAttribute("customerSecurityQueAnsVO", customerSecurityQueAnsVO);
 						}
+						/*else {
+							
+							//from here I did
+							LoginVO loginVO = loginService.findUserByUsername(username).get();
+							CustomerAccountInfoVO customerAccountInfoVO = customerAccountService.getCustomerAccount(username);
+							
+							 * if(customerAccountInfoVO != null) { if() }
+							 */
+							
+						
+						// Upto to here
 						break;
 					case "ADMIN":
 						viewName ="admin/dashboard";

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8" />
+<title>Add Beneficiary</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<script
+	src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+
+</head>
+<body>
+<!-- 	<header style="background-color: maroon; color: white; height: 30px;"> 
+	  Hello Mr. <span th:utext="${session.userSessionVO.username}" th:unless="${session == null}" style="font-weight: bold;"></span>
+	</header>
+
+	<div class="container"> -->
+	<div th:insert="customer/header"></div> 
+<div class="container"> 
+ <div th:insert="customer/nav"></div> 
+		<h2>Add Your Beneficiary</h2>
+		<br />
+		
+		<span th:utext="${error}" style="color: red;font-size: 18px;font-weight: bold;" id = "error"></span>
+      <span th:utext="${message}" style="color: blue;font-size: 18px;font-weight: bold;"></span>
+  
+		<form action="#" method="post" th:action="@{/customer/addBeneficiary}" th:object="${payeeInfoVO}">
+			
+			<input type = "hidden" name = "customerId"  th:value="${payeeInfoVO.customerId}"  th:field = "*{customerId}">
+			
+			
+			<label for="username"><b>Beneficiary Name:</b></label> <br/>
+			<input type="text"  class="form-control" name="payeeName" id="payeeName" required /> 
+			<!-- <input type="text" class="form-control" th:field="*{payeeName}" id="payeeName" /> -->
+		
+			<label for="username"><b>Beneficiary Nickname: </b></label> <br/>
+			<input type="text" class="form-control" name="payeeNickName"/>
+			<!-- <input type="text" class="form-control" th:field="*{payeeNickName}" id="payeeNickName" /> -->
+			
+			
+			<label for="username"><b>Beneficiary Account Number:</b></label> <br/>
+			<input type="text" class="form-control" name = "payeeAccountNo" id="payeeAccountNo" required/>
+<!-- 			<input type="text" class="form-control" th:field="*{payeeAccountNo}" id="payeeAccountNo" />
+ -->			
+			
+			<label for="username"><b>Remarks: </b></label> <br/>
+			<input type="text" class="form-control" name = "remarks" />
+<!-- 			<input type="text" class="form-control" th:field="*{remarks}" id="remarks" />
+ -->			
+			<br/>
+			<button type="submit" class="btn btn-primary">Add Beneficiary</button> 
+			 	 
+			
+		</form>
+		<br />
+	<a th:href="@{/customer/dashboard}"> 
+			<button type="submit" display = "inline" class="btn btn-warning">Back</button>
+			</a>
+	</div>
+
+</body>
+</html>

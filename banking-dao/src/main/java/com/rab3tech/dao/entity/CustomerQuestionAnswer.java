@@ -70,8 +70,16 @@ public class CustomerQuestionAnswer {
 		return dom;
 	}
 
+	@Override
+	public String toString() {
+		return "CustomerQuestionAnswer [id=" + id + ", question=" + question + ", answer=" + answer + ", login=" + login
+				+ ", doe=" + doe + ", dom=" + dom + "]";
+	}
+
 	public void setDom(Timestamp dom) {
 		this.dom = dom;
 	}
+	
+	
 	
 }

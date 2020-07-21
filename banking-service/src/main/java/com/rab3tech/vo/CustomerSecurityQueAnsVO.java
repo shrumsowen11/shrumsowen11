@@ -60,5 +60,16 @@ public class CustomerSecurityQueAnsVO {
 	public void setQuestionsVOs(List<SecurityQuestionsVO> questionsVOs) {
 		this.questionsVOs = questionsVOs;
 	}
+
+	@Override
+	public String toString() {
+		return "CustomerSecurityQueAnsVO [securityQuestion1=" + securityQuestion1 + ", securityQuestion2="
+				+ securityQuestion2 + ", securityQuestionAnswer2=" + securityQuestionAnswer2
+				+ ", securityQuestionAnswer1=" + securityQuestionAnswer1 + ", loginid=" + loginid + ", questionsVOs="
+				+ questionsVOs + "]";
+	}
+	
+	
+	
 	
 }

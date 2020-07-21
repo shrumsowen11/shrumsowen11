@@ -17,6 +17,7 @@ import com.rab3tech.admin.dao.repository.AccountStatusRepository;
 import com.rab3tech.admin.dao.repository.AccountTypeRepository;
 import com.rab3tech.aop.advice.TimeLogger;
 import com.rab3tech.customer.dao.repository.CustomerAccountEnquiryRepository;
+import com.rab3tech.customer.service.CustomerEnquiryService;
 import com.rab3tech.dao.entity.AccountStatus;
 import com.rab3tech.dao.entity.AccountType;
 import com.rab3tech.dao.entity.CustomerSaving;
@@ -97,6 +98,13 @@ public class CustomerEnquiryServiceImpl implements CustomerEnquiryService {
 		List<CustomerSaving> customerSavingList = customerAccountEnquiryRepository.findPendingEnquiries(AccountStatusEnum.PENDING.name());
 		return convertEntityIntoVO(customerSavingList);
 	}
+	
+	@Override
+	@TimeLogger
+	public List<CustomerSavingVO> findRegisteredEnquiry() {
+		List<CustomerSaving> customerSavingList = customerAccountEnquiryRepository.findPendingEnquiries(AccountStatusEnum.REGISTERED.name());
+		return convertEntityIntoVO(customerSavingList);
+	}
 
 	@Override
 	@TimeLogger
@@ -107,6 +115,18 @@ public class CustomerEnquiryServiceImpl implements CustomerEnquiryService {
 		}else {
 			return true;	
 		}
+	}
+	
+	
+	@Override
+	public CustomerSavingVO findByEmail(String email) {
+		Optional<CustomerSaving> optional = customerAccountEnquiryRepository.findByEmail(email);
+		CustomerSavingVO customerSavingVO = new CustomerSavingVO();
+		if(optional.isPresent()) {
+			CustomerSaving customerSaving = optional.get();
+			BeanUtils.copyProperties(customerSaving, customerSavingVO);
+		}
+		return customerSavingVO;
 	}
 	
 	
@@ -181,5 +201,7 @@ public class CustomerEnquiryServiceImpl implements CustomerEnquiryService {
 		}
 		return customerSavingVOList;
 	}
+
+	
 
 }

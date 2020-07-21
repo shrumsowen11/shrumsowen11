@@ -23,38 +23,206 @@
   background-color:#e9ffe7;
 }
 </style>
+
+
+ <script type="text/javascript">
+ 
+ 
+ 	function clearError() {
+ 			
+ 			//document.getElementById("usernameEror").innerHTML="";
+ 			/* $("#usernameError").html("");
+ 			 * 
+ 			 * --> this "$("#usernameError")"(jQuery Object) is equls to "document.getElementById("usernameEror")"(JavaScript Object)
+ 			 * --> to get the value of the object we use $("#usernameError").val();
+ 			 * 
+ 			 * $ --> jQuery
+ 			 */
+ 			 //document.getElementById("passwordEror").innerHTML="";
+ 			
+ 			//document.getElementById("error").innerHTML="";
+ 			$("#error").html("");
+ 		}
+ 		
+ 		
+ 		function validateUser() {
+ 			/* var usernameObj = document.getElementById("username");
+ 			var usernameValue = usernameObj.value(); */
+ 			
+ 			var uname = $("#username").val();
+ 			if(uname.length == 0){
+ 				 $("#error").html("Hey!, username cannot be blank!");
+ 				//document.getElementById("error").innerHTML="Sorry Username cannot be blank.";
+ 				// same as above --> $("#usernameError").html("Sorry Username cannot be blank.");
+ 				
+ 				/* This gets the usernameError id from down in the HTML page and 
+ 				.innerHTML makes the text go in between the "span" tag as the usernameError 
+ 				is inside the "span" tag*/
+ 			
+ 				
+ 				$("#username").focus();
+ 				//usernameObj.focus();
+ 				return;
+ 			}
+
+ 			
+ 			
+ 			var upassword = $("#password").val();
+
+ 			
+ 			/* var passwordObj = document.getElementById("password");
+ 			var passwordValue = passwordObj.value(); */
+ 			
+ 			if(upassword.length == 0){
+				 $("#error").html("Hey!, password cannot be blank!");
+
+ 				//document.getElementById("error").innerHTML="Sorry Password cannot be blank.";
+ 				
+ 				$("#password").focus();
+ 				//passwordObj.focus();
+ 				return;
+ 			}
+ 			
+
+ 			/*
+ 			 * Here the uname and upassword were the JavaScript and they were the proto,
+ 			 * If JavaScript printed, these will show the string in"" and number without "" along with the proto written at the end
+ 			 * 
+ 			 * Now, we are converting the username and password into JSON object and sending it to the RestAPIController 
+ 			 * where the JSON object is converted into the java object with the use of @RequestBody and again is being 
+ 			 * converted back into the JSON object by the help of ApplicationResponseVO
+ 			 */
+ 			
+ 			var jsonObj={username:uname, password:upassword};
+ 			var jsonString= JSON.stringify(jsonObj); 
+ 			
+ 			// This jsionString is now a Json String data and will have "" in everything and this do not have the proto
+ 			 
+ 			  const options = {
+ 					 method: 'POST',
+ 					 body: jsonString,
+ 					 headers: {
+ 						 'Content-Type':'application/json',
+ 						 'Accept' :'application/json'
+ 					 }
+ 				   }; 
+ 			 
+ 			 
+ 			 
+ 			 
+ 			/*
+  			 * Now, we are fetching the confirmed message from the RestController
+  			 * "fetch('/v3/user/login',options)",
+  			 * if the status is success, then we can submit the form, otherwise not
+  			 *   
+  			 */
+ 			
+  			 var promise=fetch('/v3/user/login',options);
+ 			 promise.then(res => res.json()).then(function(data){
+ 							if(data.code == 200){
+ 								$("#customerLogin").submit();
+ 							}else{
+ 								$("#error").html(data.message);
+ 							}
+ 						});
+ 	
+			
+ 			
+ 			//document.customerLogin.submit(); 
+ 			// here --> "customerLogin" is "name:"customerLogin"" and JavaScript
+ 			//document.getElementById("customerLogin").submit();
+ 			// here --> "customerLogin" is "id:"customerLogin"" and JavaScript
+
+ 			//$("#customerLogin").submit();
+ 		// here --> "customerLogin" is "Id" and jQuery
+ 		
+ 		
+ 		}
+ 		
+ 		
+ 
+         function validateEmail(){
+        	 $('#emailAuthenticationModal').modal('show');
+         }
+ 
+ 
+ </script>
+ 
+ 
 </head>
 <body>
-<header style="height: 30px;background-color: maroon;">
-</header>
+<header style="height: 30px;background-color: maroon;"></header>
 <div class="container">
-  <h2>Customer Login Page
-  </h2>
+  <h2>Customer Login Page</h2>
   <img th:src="@{/images/login.png}" alt="Logo" style="height: 140px"/>
    <br/>
-   <span th:utext="${error}" style="color: red;font-size: 18px;font-weight: bold;"></span>
+   <span th:utext="${error}" style="color: red;font-size: 18px;font-weight: bold;" id = "error"></span>
       <span th:utext="${message}" style="color: blue;font-size: 18px;font-weight: bold;"></span>
   <div style="width: 70%">
-   <form th:action="@{/customer/login}" method="POST" >
+  
+  
+  
+   <form th:action="@{/customer/login}" method="POST" name = "customerLogin" id = "customerLogin" >
+   
+   
     <div class="form-group">
       <label for="username">Username:</label>
-      <input type="text" style="width: 60%;" class="form-control"  name="username"  placeholder="Enter username">
+      <input type="text" style="width: 60%;" class="form-control"  name="username" id="username" placeholder="Enter username" onkeyup="clearError();">
+   
     </div>
   
     <div class="form-group">
       <label for="password">Password:</label>
-       <input type="password" style="width: 60%;" class="form-control"  name="password"  placeholder="Enter password">
+       <input type="password" style="width: 60%;" class="form-control"  name="password" id = "password" placeholder="Enter password" onkeyup="clearError();">
+      <br/>
     </div>
-    <button type="submit" class="btn btn-primary">Login</button>
+    
+    
+    <button type="button" class="btn btn-primary" onclick="validateUser();">Login</button>
     <button type="reset" class="btn btn-danger">Reset</button>
     <a th:href="@{/customer/account/enquiry}"> 
     <button type="button" class="btn btn-warning">Customer Enquiry</button>
     </a>
+    
+    <br />  
+    <a th:onclick="|validateEmail()|" style="cursor: pointer;">
+      <font color="red">Forgot Password?</font>
+     </a>
+    
   </form>
   </div>
 </div>
 <footer  class="ffooter">
 </footer>
 
+
+
+<!-- The Modal -->
+  <div class="modal" id="emailAuthenticationModal">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <!-- Modal Header -->
+        
+      <form action="#" method="post"  th:action="@{/customer/validateEmail}">
+        <div class="modal-header">
+          <h4 class="modal-title">Email Validation</h4>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        
+        <!-- Modal body -->
+        <div class="modal-body">
+            Email or Username
+            <input type="text" name="email" class="form-control" required>
+        
+        </div>
+        
+        <!-- Modal footer -->
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-danger">Search</button>
+        </div>
+        </form>
+      </div>
+    </div>
+  </div>
 </body>
 </html>

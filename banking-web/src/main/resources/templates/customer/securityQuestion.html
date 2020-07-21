@@ -34,8 +34,11 @@
    <br/>
    <span th:utext="${error}" style="color: red;font-size: 18px;font-weight: bold;"></span>
       <span th:utext="${message}" style="color: blue;font-size: 18px;font-weight: bold;"></span>
+      
   <div style="width: 70%">
    <form th:action="@{/customer/securityQuestion}" method="POST"  th:object="${customerSecurityQueAnsVO}" >
+   
+   
     <div class="form-group">
       <label for="question1"><b>Security Question1:</b></label>
       <select   class="form-control"  th:field="*{securityQuestion1}" id="securityQuestion1">
@@ -44,6 +47,8 @@
       <label for="answer1"><b>Answer:</b></label>
         <input type="text"  class="form-control"   th:field="*{securityQuestionAnswer1}" id="securityQuestionAnswer1">
     </div>
+    
+    
         <div class="form-group">
       <label for="question2"><b>Security Question2:</b></label>
         <select   class="form-control"  th:field="*{securityQuestion2}" id="securityQuestion2">
@@ -52,11 +57,16 @@
        <label for="answer2"><b>Answer:</b></label>
            <input type="text"  class="form-control"   th:field="*{securityQuestionAnswer2}" id="securityQuestionAnswer2">
     </div>
+    
+    
     <button type="submit" class="btn btn-primary">Save Answers</button>
     <a th:href="@{/customer/account/enquiry}"> 
     <button type="button" class="btn btn-warning">Logout</button>
     </a>
+    
   </form>
+  
+  
   </div>
 </div>
 <footer  class="ffooter">

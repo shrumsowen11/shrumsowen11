@@ -1,61 +1,74 @@
 package com.rab3tech.dao.entity;
 
-
 import java.util.Date;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 /**
  * 
- * @author nagendra.yadav
- * 00051230383783
+ * @author nagendra.yadav 00051230383783
  * 
  */
 @Entity
-@Table(name="customer_account_information_tbl")
+@Table(name = "customer_account_information_tbl")
 public class CustomerAccountInfo {
 
 	private long id;
-	private String customerId;
+	private Login customerId;
 	private String accountNumber;
 	private String currency;
 	private String branch;
 	private float tavBalance;
 	private float avBalance;
 	private Date StatusAsOf;
-	private String accountType;
+	private AccountType accountType;
+	//private AccountStatus accountStatus;
 
-	@Column(length=20)
-	public String getAccountType() {
+	@OneToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "customer_id", nullable = false)
+	public Login getCustomerId() {
+		return customerId;
+	}
+
+	public void setCustomerId(Login customerId) {
+		this.customerId = customerId;
+	}
+
+	@OneToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "accountType", nullable = false)
+	public AccountType getAccountType() {
 		return accountType;
 	}
 
-	public void setAccountType(String accountType) {
+	public void setAccountType(AccountType accountType) {
 		this.accountType = accountType;
 	}
 
-
+	
+	/*
+	 * @OneToOne(fetch = FetchType.EAGER)
+	 * 
+	 * @JoinColumn(name = "accountStatus", nullable = false) public AccountStatus
+	 * getAccountStatus() { return accountStatus; }
+	 * 
+	 * public void setAccountStatus(AccountStatus accountStatus) {
+	 * this.accountStatus = accountStatus; }
+	 */
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	public long getId() {
 		return id;
 	}
 
 	public void setId(long id) {
 		this.id = id;
-	}
-
-	public String getCustomerId() {
-		return customerId;
-	}
-
-	public void setCustomerId(String customerId) {
-		this.customerId = customerId;
 	}
 
 	public String getAccountNumber() {
@@ -81,8 +94,6 @@ public class CustomerAccountInfo {
 	public void setBranch(String branch) {
 		this.branch = branch;
 	}
-
-	
 
 	public float getTavBalance() {
 		return tavBalance;
@@ -110,14 +121,13 @@ public class CustomerAccountInfo {
 
 	@Override
 	public String toString() {
-		return "CustomerAccountInfo [id=" + id + ", customerId=" + customerId
-				+ ", accountNumber=" + accountNumber + ", currency=" + currency
-				+ ", branch=" + branch + ", tavBalance=" + tavBalance
-				+ ", avBalance=" + avBalance + ", StatusAsOf=" + StatusAsOf
-				+ "]";
+		return "CustomerAccountInfo [id=" + id + ", customerId=" + customerId + ", accountNumber=" + accountNumber
+				+ ", currency=" + currency + ", branch=" + branch + ", tavBalance=" + tavBalance + ", avBalance="
+				+ avBalance + ", StatusAsOf=" + StatusAsOf + ", accountType=" + accountType + "]";
 	}
+	
+	
 	
 	
 
 }
-

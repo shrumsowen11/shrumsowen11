@@ -1,6 +1,7 @@
 package com.rab3tech.dao.entity;
 
 import java.sql.Timestamp;
+import java.util.Arrays;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -20,6 +21,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "customer_tbl")
+
 public class Customer {
 
 	private int id;
@@ -181,6 +183,14 @@ public class Customer {
 
 	public void setDom(Timestamp dom) {
 		this.dom = dom;
+	}
+
+	@Override
+	public String toString() {
+		return "Customer [id=" + id + ", name=" + name + ", address=" + address + ", email=" + email + ", mobile="
+				+ mobile + ", ssn=" + ssn + ", age=" + age + ", gender=" + gender + ", dob=" + dob + ", father="
+				+ father + ", qualification=" + qualification + ", jobTitle=" + jobTitle + ", photoName=" + photoName
+				+ ", image=" + Arrays.toString(image) + ", login=" + login + ", doe=" + doe + ", dom=" + dom + "]";
 	}
 	
 	

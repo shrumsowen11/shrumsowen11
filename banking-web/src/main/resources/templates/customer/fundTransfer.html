@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>Fund Transfer Page</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+  
+ 
+<style>
+.ffooter {
+	position: fixed;
+	left: 0;
+	bottom: 0;
+	width: 100%;
+	background-color: red;
+	color: white;
+	text-align: center;
+	height: 30px;
+	background-color: #e9ffe7;
+}
+</style>
+<!-- 
+ <script type="text/javascript">
+ 
+ function validatePayeeModal(){
+	
+	 $("#customerId").val();
+	 $("#amount").val();
+	 $("#description").val();
+	 $("#payeeId").val();
+	 $('#validatePayee').modal('show');
+
+ }
+ 	
+ </script> -->
+</head>
+<body>
+	<div th:insert="customer/header"></div> 
+<div class="container"> 
+ <div th:insert="customer/nav"></div> 
+		<h2>Fund Transfer</h2>
+		<img th:src="@{/images/fundTransfer.png}" alt="Logo"
+			style="height: 140px" /> <br /> <span th:utext="${error}"
+			style="color: red; font-size: 18px; font-weight: bold;"></span> <span
+			th:utext="${message}"
+			style="color: blue; font-size: 18px; font-weight: bold;"></span>
+
+		<div th:if="${payeeList != null}" style="width: 70%">
+
+			<form th:action="@{/customer/transferFund}" method="POST">
+				<div class="form-group">
+				    
+					
+					<input type="hidden"  name="customerId" id="customerId"  class="form-control"/> 
+				
+					<label for="payeeId" ><b>Select Beneficiary:</b></label> 
+					<select class="form-control" name="payeeId" id = "payeeId">
+					<option th:each="beneficiary : ${payeeList}" th:value="${beneficiary.id}" th:text="${beneficiary.payeeNickName}"></option>
+					
+					</select> 
+					
+					<label for="amount"><b>Amount:</b></label> 
+					<input type="text" class="form-control" name="amount"  id = "amount" /> 
+					
+					<label for="description"><b>Description:</b></label> 
+					<input type="text" class="form-control" name="description"  id = "description" placeholder="Reason for sending funds" />
+					
+				</div>
+				<!-- <button type="button" class="btn btn-primary" onclick="validatePayeeModal()">Finalize</button> -->
+				<button type="submit" class="btn btn-primary" >Finalize</button>
+				<button type="reset" class="btn btn-danger">Reset</button>
+				<a th:href="@{/customer/dashboard}">
+					<button type="button" class="btn btn-warning">Back</button>
+				</a>
+			</form>
+		</div>
+	</div>
+	<footer class="ffooter"> </footer>
+
+
+
+<!-- 
+  <div class="modal" id="validatePayee">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        Modal Header
+        
+      <form action="#" method="post"  th:action="@{/customer/transferFund}">
+        <div class="modal-header">
+          <h4 class="modal-title">Confirmation</h4>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        
+        Modal body
+        <div class="modal-body">
+        	 <input type="hidden"  name=customerId id="customerId" class="form-control" /> 
+        	 <input type="hidden"  name="amount" id="amount" class="form-control" /> 
+        	 <input type="hidden"  name="description" id="description" class="form-control" /> 
+        	 <input type="hidden"  name="payeeId" id="payeeId" class="form-control" /> 
+        	 
+        
+                  <h5 style = "color:Blue" >Are you sure want to confirm this transaction?</h5> 
+        </div>
+        
+      
+        <div class="modal-footer">
+        <button type="submit" class="btn btn-primary">Confirm</button>
+            <a th:href="@{/customer/fundTransferPage}"> 
+          <button type="button" class="btn btn-danger">Back</button>
+          </a>
+        </div>
+        </form>
+      </div>
+    </div>
+  </div>
+   -->
+  
+</body>
+</html>

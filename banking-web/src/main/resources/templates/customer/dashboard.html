@@ -2,14 +2,15 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
     xmlns:th="http://www.thymeleaf.org">
 <head>
-  <title>Login Page</title>
+  <title>Customer Dashboard</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
-  
+ 
   <style>
 .ffooter {
   position: fixed;
@@ -23,15 +24,58 @@
   background-color:#e9ffe7;
 }
 </style>
+
+<!-- <script>
+	$(function() {
+		$("#header").load("header.html");
+		//$("#footer").load("footer.html");
+	});
+</script>  -->
+
 </head>
 <body>
+
+
+
+
+<!-- 
 <header style="height: 30px;background-color: maroon;color:white;">
   Hello Mr. <span th:utext="${session.userSessionVO.username}" th:unless="${session == null}" style="font-weight: bold;"></span>
-   
-</header>
-<div class="container">
+    
+</header> -->
+<div th:insert="customer/header"></div> 
+<div class="container"> 
+ <div th:insert="customer/nav"></div> 
   <h2>Customer Dashboard Page
   </h2>
+  <br/>
+ <!-- 
+    <a th:href="@{/customer/showTransactions}"> 
+  <button type="button" class="btn btn-primary">Account Summary</button>
+  </a>
+  <a th:href="@{/customer/profileDetails}"> 
+  <button type="button" class="btn btn-primary">Profile</button>
+  </a>
+  <a th:href="@{/customer/showBeneficiaries}"> 
+  <button type="button" class="btn btn-primary">Manage Beneficiary</button>
+  </a>
+  
+  <a th:href="@{/customer/fundTransferPage}"> 
+  <button type="button" class="btn btn-success">Fund Transfer</button>
+  </a>
+  
+  <a th:href="@{/logout/success}">
+	<button type="button" class="btn btn-warning">Logout</button>
+		</a>
+  <br/>  -->
+  
+  
+  
+ <!-- You do not have any accounts yet. Please
+  <a th:href="@{/customer/dashboard}"> 
+  make your account
+  </a>
+  . -->
   <img th:src="@{/images/customer_dashboard.jpg}" alt="page"/>
    <span th:utext="${error}" style="color: red;font-size: 18px;"></span>
   <div style="width: 70%">

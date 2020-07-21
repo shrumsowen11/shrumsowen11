@@ -1,4 +1,4 @@
-package com.rab3tech.customer.service.impl;
+package com.rab3tech.customer.service;
 
 import java.util.List;
 import java.util.Optional;
@@ -15,4 +15,6 @@ public interface CustomerEnquiryService {
 	String updateEnquiryRegId(int csaid, String ucrid);
 	Optional<CustomerSavingVO> findCustomerEnquiryByUuid(String ucrid);
 	List<CustomerSavingVO> findPendingEnquiry();
+	List<CustomerSavingVO> findRegisteredEnquiry();
+	public CustomerSavingVO findByEmail(String email);
 }

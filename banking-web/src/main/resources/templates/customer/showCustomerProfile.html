@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8" />
+<title>Customer Registration</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<script
+	src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+
+
+</head>
+
+<body>
+	<div th:insert="customer/header"></div> 
+<div class="container"> 
+ <div th:insert="customer/nav"></div> 
+		<h3>Customer Profile</h3>
+		<br /> <span style="color: red; font-size: 18px;" id="message"></span>
+
+
+		<form>
+
+			<img th:src="@{/images/coolguy.jpg}" alt="Logo" style="height: 140px" />
+			<a th:href="@{/customer/editProfile}">
+				<button type="button" class="btn btn-primary">Edit Profile</button>
+			</a> <br />
+			<table class="table table-striped table-bordered "
+				style="color: black">
+				<tr>
+					<th>Name:</th>
+					<td th:text="${customerVO.name}"></td>
+				</tr>
+
+				<tr>
+					<th>Mobile:</th>
+					<td th:text="${customerVO.mobile}"></td>
+				</tr>
+
+				<tr>
+					<th>Email:</th>
+					<td th:text="${customerVO.email}"></td>
+				</tr>
+
+				<tr>
+					<th>Job Title:</th>
+					<td th:text="${customerVO.jobTitle}"></td>
+				</tr>
+
+				<tr>
+					<th>Address:</th>
+					<td th:text="${customerVO.address}"></td>
+				</tr>
+
+				<tr>
+					<th>SSN:</th>
+					<td th:text="${customerVO.ssn}"></td>
+				</tr>
+
+				<tr>
+					<th>Gender:</th>
+					<td th:text="${customerVO.gender}"></td>
+				</tr>
+
+				<tr>
+					<th>Father Name:</th>
+					<td th:text="${customerVO.father}"></td>
+				</tr>
+
+				<tr>
+					<th>Qualification:</th>
+					<td th:text="${customerVO.qualification}"></td>
+				</tr>
+
+
+				<tr>
+					<th>DOB:</th>
+					<td th:text="${customerVO.dob}"></td>
+				</tr>
+
+
+
+			</table>
+		</form>
+	</div>
+
+</body>
+</html>

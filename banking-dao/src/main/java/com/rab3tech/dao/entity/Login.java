@@ -25,19 +25,19 @@ import javax.persistence.Transient;
 @Entity
 @Table(name="user_login_tbl")
 public class Login {
+	
 	private String loginid;
 	private String name;
     private String password;
+    private String email;
+    private Timestamp llt;
 	private String locked;
 	private int noOfAttempt;
-	private Timestamp llt;
 	private Timestamp lwap;
-	private String email;
 	private Date passwordExpire;
 	private String token;
 	private List<CustomerQuestionAnswer> customerQuestionAnswers;
-	
-	 private Set<Role> roles;
+	private Set<Role> roles;
 	 
 	 
 	 public Timestamp getLwap() {

@@ -148,6 +148,13 @@ public class CustomerSavingVO {
 			return false;
 		return true;
 	}
+
+	@Override
+	public String toString() {
+		return "CustomerSavingVO [csaid=" + csaid + ", name=" + name + ", email=" + email + ", mobile=" + mobile
+				+ ", location=" + location + ", accType=" + accType + ", status=" + status + ", ucrid=" + ucrid
+				+ ", doa=" + doa + ", appref=" + appref + "]";
+	}
 	
 	
 	

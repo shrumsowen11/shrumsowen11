@@ -1,0 +1,38 @@
+<div class="container">
+<img th:src="@{/images/mountain.jpg}" alt="Logo" style="padding: 10px; height: 140px"/>
+
+</div>
+<br/>
+<a th:href="@{/customer/showTransactions}"> 
+  <button type="button" class="btn btn-primary">Account Summary</button>
+  </a>
+  <a th:href="@{/customer/profileDetails}"> 
+  <button type="button" class="btn btn-primary">Profile</button>
+  </a>
+  <a th:href="@{/customer/showBeneficiaries}"> 
+  <button type="button" class="btn btn-primary">Manage Beneficiary</button>
+  </a>
+  
+  
+  <!-- <div class="dropdown"> -->
+    <button class="btn btn-info dropdown-toggle" type="button" data-toggle="dropdown">Requests
+    <span class="caret"></span></button>
+    <ul class="dropdown-menu">
+      <li><a href="/customer/checkBookRequest">Check Books</a></li>
+      <li class="divider"></li>
+      <li class ="disabled"><a href="/customer/addressChangeRequest">Address Change</a></li>
+      <li class="divider"></li>
+      <li class ="disabled"><a href="/customer/phoneNoChangeRequest">Phone Number</a></li>
+    </ul>
+  <!-- </div> -->
+  
+  
+  <a th:href="@{/customer/fundTransferPage}"> 
+  <button type="button" class="btn btn-success">Fund Transfer</button>
+  </a>
+  
+  <a th:href="@{/logout/success}">
+	<button type="button" class="btn btn-warning">Logout</button>
+		</a>
+  <br/>
+  <hr/>

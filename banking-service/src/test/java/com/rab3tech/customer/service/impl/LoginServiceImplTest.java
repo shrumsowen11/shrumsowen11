@@ -16,18 +16,28 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import com.rab3tech.customer.dao.repository.LoginRepository;
 import com.rab3tech.dao.entity.Login;
 import com.rab3tech.dao.entity.Role;
 import com.rab3tech.vo.LoginVO;
 
+//JNUIT Runner is software which runs the available test cases and creates summary of that
+//By default the JUNIT Runner is from JUNIT itself
+
 
 @RunWith(MockitoJUnitRunner.class)
 public class LoginServiceImplTest {
 	
+	
+	//Side Note: Mochito cannot mock private, static and final methods.
 	@Mock
 	private LoginRepository loginRepository;
+	 
+	@Mock
+	private BCryptPasswordEncoder bCryptPasswordEncoder;
 	
 	@InjectMocks
 	private LoginServiceImpl loginServiceImpl;

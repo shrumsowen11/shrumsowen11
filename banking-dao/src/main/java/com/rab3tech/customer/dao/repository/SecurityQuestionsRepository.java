@@ -10,5 +10,7 @@ import com.rab3tech.dao.entity.SecurityQuestions;
  *
  */
 public interface SecurityQuestionsRepository extends JpaRepository<SecurityQuestions, Integer> {
+	
+	public SecurityQuestions findByQuestions(String question);
 }
 

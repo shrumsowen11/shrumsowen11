@@ -6,14 +6,14 @@ import java.util.List;
 public class LoginVO {
 
 	private int uid;
+	private String name;
 	private String username;
 	private String password;
-	private Timestamp llt;
 	private String email;
-	private List<String> roles;
-	private String name;
+	private Timestamp llt;
 	private String salutation;
 	private String locked;
+	private List<String> roles;
 	
 	public Timestamp getLlt() {
 		return llt;
