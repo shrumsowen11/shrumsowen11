@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8" />
+<title>Customer Address Update</title>
+<meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+
+
+</head>
+
+<body>
+  <header style="background-color: maroon;height: 30px;">
+  </header>
+   
+    <div class="container">
+        <h3>Customer Address Update</h3>
+        <br />
+        <span style="color: red;font-size: 18px;" id="message"></span>
+        <form action="#" method="post"  th:action="@{/customer/addressUpdate}">
+            
+         First Name:
+         <input type="text" class="form-control" name = "firstName" id="firstName" placeholder="Enter your first name" />
+         
+         Last Name:
+         <input type="text" class="form-control" name = "lastName" id="lastName" placeholder="Enter your last name" />
+                   
+         Address 1:
+         <input type="text" class="form-control" name = "address1" placeholder="Enter your address"/>
+         
+         Address 2:
+         <input type="text" class="form-control" name = "address2" placeholder="house no., apt no., likewise"/>
+               
+         City:
+         <input type="text" class="form-control" name = "city" placeholder="Enter your city"/>
+         
+         State:
+         <input type="text" class="form-control" name = "state" placeholder="Enter your state"/>
+                   
+         ZipCode:
+         <input type="text" class="form-control" name = "zipcode" placeholder="Enter your zipcode"/>                 
+         
+         Country:
+         <input type="text" class="form-control" name = "country" placeholder="Enter your country"/>
+                   
+         Phone number:
+         <input type="text" class="form-control" name = "mobile" placeholder="Enter your phone number"/>               
+               
+              
+         &nbsp;
+         &nbsp;
+         
+         <button type="submit" class="btn btn-success">Save</button>
+         <button type="reset" class="btn btn-danger">Reset</button>
+               
+        </form>
+  </div>
+  
+</body>
+</html>

@@ -3,6 +3,8 @@ package com.rab3tech.customer.service.impl;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.HashSet;
@@ -16,97 +18,142 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnitRunner;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import com.rab3tech.customer.dao.repository.LoginRepository;
 import com.rab3tech.dao.entity.Login;
 import com.rab3tech.dao.entity.Role;
+import com.rab3tech.vo.ChangePasswordVO;
 import com.rab3tech.vo.LoginVO;
 
 //JNUIT Runner is software which runs the available test cases and creates summary of that
 //By default the JUNIT Runner is from JUNIT itself
 
-
 @RunWith(MockitoJUnitRunner.class)
 public class LoginServiceImplTest {
-	
-	
-	//Side Note: Mochito cannot mock private, static and final methods.
+
+	// Side Note: Mochito cannot mock private, static and final "METHODS".
 	@Mock
 	private LoginRepository loginRepository;
-	 
+
 	@Mock
 	private BCryptPasswordEncoder bCryptPasswordEncoder;
-	
+
 	@InjectMocks
 	private LoginServiceImpl loginServiceImpl;
-	
-	
+
 	@Before
 	public void init() {
-		 MockitoAnnotations.initMocks(this); //Initializing mocking for each test cases
+		MockitoAnnotations.initMocks(this); // Initializing mocking for each test cases
+	}
+
+	@Test
+	public void testCheckPasswordValidWhenCorrect() {
+		Login login = new Login();
+		login.setEmail("nagen@gmail.com");
+		login.setLoginid("owowo282");
+		login.setPassword("cool@1234");
+		Optional<Login> ologin = Optional.of(login);
+		// we need this optional here, because, the actual method .findByLoginid()
+		// returns Optional
+		when(loginRepository.findByLoginid("nagen@gmail.com")).thenReturn(ologin);
+
+		when(bCryptPasswordEncoder.matches("cool@1234", login.getPassword())).thenReturn(true);
+		boolean result = loginServiceImpl.checkPasswordValid("nagen@gmail.com", "cool@1234");
+		assertEquals(true, result);
+
+	}
+
+	/*
+	 * 
+	 * @Override public void changePassword(ChangePasswordVO changePasswordVO) {
+	 * String
+	 * encodedPassword=bCryptPasswordEncoder.encode(changePasswordVO.getNewPassword(
+	 * )); Login
+	 * login=loginRepository.findByLoginid(changePasswordVO.getLoginid()).get();
+	 * login.setPassword(encodedPassword); login.setLlt(new Timestamp(new
+	 * Date().getTime())); //loginRepository.save(login); }
+	 * 
+	 * 
+	 */
+
+	@Test
+	public void testChangePasswordValid() {
+		ChangePasswordVO changePasswordVO = new ChangePasswordVO();
+		changePasswordVO.setLoginid("owowo282");
+		Login login = new Login();
+		login.setEmail("nagen@gmail.com");
+		login.setLoginid("owowo282");
+		login.setPassword("cool@1234");
+		Optional<Login> ologin = Optional.of(login);
+
+		when(loginRepository.findByLoginid(changePasswordVO.getLoginid())).thenReturn(ologin);
+		
+		loginServiceImpl.changePassword(changePasswordVO);
+		verify(loginRepository, times(1)).findByLoginid(changePasswordVO.getLoginid());
+		
+
 	}
 
 	@Test
 	public void testFindUserByUsernameWhenExist() {
-		Login login=new Login();
+		Login login = new Login();
 		login.setEmail("nagen@gmail.com");
 		login.setLoginid("owowo282");
 		login.setPassword("cool@1234");
-		Set<Role> rolesSet=new HashSet<>();
-		Role role=new Role();
+		Set<Role> rolesSet = new HashSet<>();
+		Role role = new Role();
 		role.setName("ADMIN");
 		role.setRid(100);
 		rolesSet.add(role);
 		login.setRoles(rolesSet);
-		Optional<Login> ologin=Optional.of(login);
+		Optional<Login> ologin = Optional.of(login);
 		when(loginRepository.findByLoginid("nagen@gmail.com")).thenReturn(ologin);
-		Optional<LoginVO>   optional=loginServiceImpl.findUserByUsername("nagen@gmail.com");
+		Optional<LoginVO> optional = loginServiceImpl.findUserByUsername("nagen@gmail.com");
 		assertTrue(optional.isPresent());
 		assertEquals("nagen@gmail.com", optional.get().getEmail());
 	}
-	
+
 	@Test
 	public void testFindUserByUsernameWhenNotExist() {
-		Optional<Login> ologin=Optional.empty();
+		Optional<Login> ologin = Optional.empty();
 		when(loginRepository.findByLoginid("nagen@gmail.com")).thenReturn(ologin);
-		Optional<LoginVO>   optional=loginServiceImpl.findUserByUsername("nagen@gmail.com");
+		Optional<LoginVO> optional = loginServiceImpl.findUserByUsername("nagen@gmail.com");
 		assertFalse(optional.isPresent());
 	}
 
 	@Test
 	public void testAuthUserWhenExist() {
-		Login login=new Login();
+		Login login = new Login();
 		login.setEmail("nagen@gmail.com");
 		login.setLoginid("owowo282");
 		login.setPassword("cool@1234");
-		Set<Role> rolesSet=new HashSet<>();
-		Role role=new Role();
+		Set<Role> rolesSet = new HashSet<>();
+		Role role = new Role();
 		role.setName("ADMIN");
 		role.setRid(100);
 		rolesSet.add(role);
 		login.setRoles(rolesSet);
-		Optional<Login> ologin=Optional.of(login);
-		
-		LoginVO loginVO=new LoginVO();
+		Optional<Login> ologin = Optional.of(login);
+
+		LoginVO loginVO = new LoginVO();
 		loginVO.setUsername("nagen@gmail.com");
 		loginVO.setPassword("cool@1234");
-		when(loginRepository.findByLoginidAndPassword("nagen@gmail.com","cool@1234")).thenReturn(ologin);
-		Optional<LoginVO> loginVO2=loginServiceImpl.authUser(loginVO);
+		when(loginRepository.findByLoginidAndPassword("nagen@gmail.com", "cool@1234")).thenReturn(ologin);
+		Optional<LoginVO> loginVO2 = loginServiceImpl.authUser(loginVO);
 		assertTrue(loginVO2.isPresent());
 		assertEquals("cool@1234", loginVO2.get().getPassword());
 		assertEquals("ADMIN", loginVO2.get().getRoles().get(0));
 	}
-	
+
 	@Test
 	public void testAuthUserWhenNotExist() {
-		Optional<Login> ologin=Optional.empty();
-		LoginVO loginVO=new LoginVO();
+		Optional<Login> ologin = Optional.empty();
+		LoginVO loginVO = new LoginVO();
 		loginVO.setUsername("nagen@gmail.com");
 		loginVO.setPassword("cool@1234");
-		when(loginRepository.findByLoginidAndPassword("nagen@gmail.com","cool@1234")).thenReturn(ologin);
-		Optional<LoginVO> loginVO2=loginServiceImpl.authUser(loginVO);
+		when(loginRepository.findByLoginidAndPassword("nagen@gmail.com", "cool@1234")).thenReturn(ologin);
+		Optional<LoginVO> loginVO2 = loginServiceImpl.authUser(loginVO);
 		assertFalse(loginVO2.isPresent());
 	}
 

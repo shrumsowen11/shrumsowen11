@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.rab3tech.customer.dao.repository.PayeeInfoRepository;
+import com.rab3tech.customer.service.AddressService;
 import com.rab3tech.customer.service.CustomerAccountService;
 import com.rab3tech.customer.service.CustomerEnquiryService;
 import com.rab3tech.customer.service.CustomerService;
@@ -29,6 +30,7 @@ import com.rab3tech.dao.entity.AccountType;
 import com.rab3tech.dao.entity.CustomerSavingApproved;
 import com.rab3tech.email.service.EmailService;
 import com.rab3tech.vo.AccountTypeVO;
+import com.rab3tech.vo.AddressVO;
 import com.rab3tech.vo.ChangePasswordVO;
 import com.rab3tech.vo.CustomerAccountInfoVO;
 import com.rab3tech.vo.CustomerSavingApprovedVO;
@@ -62,6 +64,9 @@ public class CustomerUIController {
 
 	@Autowired
 	private CustomerService customerService;
+
+	@Autowired
+	private AddressService addressService;
 
 	@Autowired
 	private EmailService emailService;
@@ -359,18 +364,18 @@ public class CustomerUIController {
 	}
 
 	@GetMapping("/customer/fundTransferPage")
-	public String fundTransferPage(HttpSession session,Model model) {
+	public String fundTransferPage(HttpSession session, Model model) {
 		logger.info("fundTransferPage is called!!!");
 		LoginVO loginVO = (LoginVO) session.getAttribute("userSessionVO");
-		if(loginVO != null) {
+		if (loginVO != null) {
 			List<PayeeInfoVO> payeeList = payeeInfoService.findByCustomerId(loginVO.getUsername());
 			model.addAttribute("payeeList", payeeList);
-			return "customer/fundTransfer";	
-		}else {
+			return "customer/fundTransfer";
+		} else {
 			model.addAttribute("message", "Sorry, the fund transfer was not successful. Please login.");
 			return "customer/login";
 		}
-		
+
 	}
 
 	@PostMapping("/customer/transferFund")
@@ -378,7 +383,8 @@ public class CustomerUIController {
 		logger.info("fundTransferPage is called!!!");
 		String viewName = "redirect:/customer/fundTransferPage";
 		LoginVO loginVO = (LoginVO) session.getAttribute("userSessionVO");
-		boolean customerAccountExist = customerAccountService.getCustomerAccountApprovedByUsername(loginVO.getUsername());
+		boolean customerAccountExist = customerAccountService
+				.getCustomerAccountApprovedByUsername(loginVO.getUsername());
 		if (!customerAccountExist) {
 			model.addAttribute("message", "Sorry, the fund transfer was not successful. Please try again.");
 		} else {
@@ -386,64 +392,67 @@ public class CustomerUIController {
 			String message = fundTransferService.processFundTransfer(fundTransferVO);
 			model.addAttribute("message", message);
 			viewName = "redirect:/customer/showBeneficiaries";
-			
+
 		}
 		return viewName;
 	}
-	
-	
+
 	@GetMapping("/customer/showTransactions")
-	public String showTransactions(HttpSession session,Model model) {
+	public String showTransactions(HttpSession session, Model model) {
 		logger.info("showTransactions is called!!!");
 		LoginVO loginVO = (LoginVO) session.getAttribute("userSessionVO");
 		String viewName = "customer/dashboard";
-		if(loginVO != null) {
+		if (loginVO != null) {
 			List<FundTransferVO> transactionList = fundTransferService.findAllTransactions(loginVO.getUsername());
-			if(transactionList != null) {
+			if (transactionList != null) {
 				
 				model.addAttribute("transactionList", transactionList);
 				viewName = "customer/accountSummary";
-			}else {
+			} else {
 				model.addAttribute("message", "You do not have any transactions yet.");
 				viewName = "customer/accountSummary";
 			}
-		}else {
+		} else {
 			model.addAttribute("message", "Sorry, the fund transfer was not successful. Please login.");
 		}
 		return viewName;
-		
+
 	}
-	
-	/*
+
 	@GetMapping("/customer/checkBookRequest")
 	public String checkBookRequest(HttpSession session, Model model) {
 		logger.info("checkBookRequest is called!!!");
 		LoginVO loginVO = (LoginVO) session.getAttribute("userSessionVO");
 		String viewName = "customer/dashboard";
-		if(loginVO != null) {
-			send/trigger an email to customer "Your request has been sent. Contact your bank rep after 2 days."
-			
-		}
-	}
-/*
-	@PostMapping("/customer/transferFunds")
-	public String transferFunds(@ModelAttribute FundTransferVO fundTransferVO, HttpSession session, Model model) {
-		logger.info("fundTransferPage is called!!!");
-		String viewName = "redirect:/customer/fundTransferPage";
-		LoginVO loginVO = (LoginVO) session.getAttribute("userSessionVO");
-		boolean customerAccountExist = customerAccountService.getCustomerAccountApprovedByUsername(loginVO.getUsername());
-		if (!customerAccountExist) {
-			model.addAttribute("message", "Sorry, the fund transfer was not successful. Please try again.");
-		} else {
-			fundTransferVO.setCustomerId(loginVO.getUsername());
-			String message = fundTransferService.processFundTransfer(fundTransferVO);
-			model.addAttribute("message", message);
-			viewName = "redirect:/customer/showBeneficiaries";
-			
+		if (loginVO != null) {
+			AddressVO addressVO = addressService.findByLoginid(loginVO.getUsername());
+			if (addressVO != null) {
+				List<CustomerAccountInfoVO> customerAccountInfoVOs = customerAccountService.findByLoginid(loginVO.getUsername());
+				model.addAttribute("customerAccountInfoVOs", customerAccountInfoVOs);
+				model.addAttribute("addressVO", addressVO);
+				viewName = "customer/showAddressSendEnquiry";
+			} else {
+				viewName = "customer/updateAddress";
+			}
 		}
 		return viewName;
 	}
-	
-	*/
+
+	@PostMapping("/customer/addressUpdate")
+	public String addressUpdate(@ModelAttribute AddressVO addressVO, HttpSession session, Model model) {
+		logger.info("addressUpdate is called!!!");
+		LoginVO loginVO = (LoginVO) session.getAttribute("userSessionVO");
+		if (loginVO != null) {
+			addressVO.setUserid(loginVO.getUsername());
+			String message = addressService.addressUpdate(addressVO);
+			model.addAttribute("message", message);
+			return "redirect:/customer/dashboard";
+		} else {
+			model.addAttribute("message", "Please login for update.");
+			return "customer/login";
+		}
+	}
 
 }
+
+

@@ -99,6 +99,8 @@ public class PayeeInfoServiceImplTest {
 	@Test
 	public void testFindByPayeeAccountNoWhenNotPresent() {
 		PayeeInfo payeeInfo = new PayeeInfo();
+		//Optional<PayeeInfo> oPayeeInfo = Optional.empty();
+		
 		Optional<PayeeInfo> oPayeeInfo = Optional.of(payeeInfo);
 		when(payeeInfoRepository.findByPayeeAccountNo("123")).thenReturn(oPayeeInfo);
 		PayeeInfoVO payeeInfoVO = payeeInfoServiceImpl.findByPayeeAccountNo("123");

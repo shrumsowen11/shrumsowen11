@@ -2,9 +2,11 @@
 package com.rab3tech.customer.service.impl;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,29 +37,29 @@ public class CustomerAccountServiceImpl implements CustomerAccountService {
 
 	@Autowired
 	private CustomerAccountInfoRepository customerAccountInfoRepository;
-	
+
 	@Autowired
 	private CustomerQuestionsAnsRepository customerQuestionsAnsRepository;
-	
+
 	@Autowired
 	private CustomerAccountApprovedRepository customerAccountApprovedRepository;
-	
+
 	@Autowired
 	private SecurityQuestionsRepository securityQuestionsRepository;
-	
+
 	@Autowired
 	private LoginRepository loginRepository;
-	
+
 	@Autowired
 	private CustomerRepository customerRepository;
-	
+
 	@Autowired
 	private BCryptPasswordEncoder bCryptPasswordEncoder;
 
 	@Override
 	public CustomerAccountInfoVO getCustomerAccount(String username) {
 		Optional<Login> login = loginRepository.findByLoginid(username);
-		
+
 		CustomerAccountInfo customerAccountInfo = customerAccountInfoRepository.findByCustomerId(login.get());
 		CustomerAccountInfoVO customerAccountInfoVO = new CustomerAccountInfoVO();
 		if (customerAccountInfo != null) {
@@ -69,7 +71,8 @@ public class CustomerAccountServiceImpl implements CustomerAccountService {
 	@Override
 	public CustomerSecurityQueAnsVO getCustomerSecurityQA(String username) {
 		List<CustomerQuestionAnswer> questionAnswers = customerQuestionsAnsRepository.findQuestionAnswer(username);
-		//List<CustomerSecurityQueAnsVO> questions = new ArrayList<CustomerSecurityQueAnsVO>();
+		// List<CustomerSecurityQueAnsVO> questions = new
+		// ArrayList<CustomerSecurityQueAnsVO>();
 		CustomerSecurityQueAnsVO customerSecurityQueAnsVO = new CustomerSecurityQueAnsVO();
 		if (questionAnswers != null) {
 			customerSecurityQueAnsVO.setLoginid(username);
@@ -77,47 +80,59 @@ public class CustomerAccountServiceImpl implements CustomerAccountService {
 			customerSecurityQueAnsVO.setSecurityQuestion2(questionAnswers.get(1).getQuestion());
 			customerSecurityQueAnsVO.setSecurityQuestionAnswer1(questionAnswers.get(0).getAnswer());
 			customerSecurityQueAnsVO.setSecurityQuestionAnswer2(questionAnswers.get(1).getAnswer());
-			
 
 		}
 		return customerSecurityQueAnsVO;
 	}
-	
+
 	@Override
 	public void changeForgottenPassword(ChangePasswordVO changePasswordVO) {
-		String encodedPassword=bCryptPasswordEncoder.encode(changePasswordVO.getNewPassword());
-		//Customer customer = customerRepository.findByEmail(email).get();
-		Login  login = loginRepository.findByLoginid(changePasswordVO.getLoginid()).get();
+		String encodedPassword = bCryptPasswordEncoder.encode(changePasswordVO.getNewPassword());
+		// Customer customer = customerRepository.findByEmail(email).get();
+		Login login = loginRepository.findByLoginid(changePasswordVO.getLoginid()).get();
 		login.setPassword(encodedPassword);
 		login.setLlt(new Timestamp(new Date().getTime()));
 	}
 
 	@Override
 	public boolean getCustomerAccountApprovedByUsername(String username) {
-		 Optional<CustomerSavingApproved> optional =  customerAccountApprovedRepository.findByEmail(username);
+		Optional<CustomerSavingApproved> optional = customerAccountApprovedRepository.findByEmail(username);
 
-		if(optional.isPresent()) {
+		if (optional.isPresent()) {
 			return true;
 
 		}
-	return false;
+		return false;
 	}
 
 	@Override
 	public CustomerAccountInfoVO findByAccountNumber(String payeeAccountNo) {
 		Optional<CustomerAccountInfo> optional = customerAccountInfoRepository.findByAccountNumber(payeeAccountNo);
-		CustomerAccountInfoVO customerAccountInfoVO =  new CustomerAccountInfoVO();
-		if(optional.isPresent()) {
+		CustomerAccountInfoVO customerAccountInfoVO = new CustomerAccountInfoVO();
+		if (optional.isPresent()) {
 			BeanUtils.copyProperties(optional.get(), customerAccountInfoVO);
 			Login login = optional.get().getCustomerId();
 			LoginVO loginVO = new LoginVO();
-			// we cannot beancopy the login into loginVO because, they do not have all the data types same if you go see inside them
-			//BeanUtils.copyProperties(login, loginVO);
+			// we cannot beancopy the login into loginVO because, they do not have all the
+			// data types same if you go see inside them
+			// BeanUtils.copyProperties(login, loginVO);
 
 			loginVO.setEmail(login.getLoginid());
 			customerAccountInfoVO.setCustomerId(loginVO);
 		}
 		return customerAccountInfoVO;
 	}
-}
 
+	@Override
+	public List<CustomerAccountInfoVO> findByLoginid(String username) {
+		Optional<Login> login = loginRepository.findByLoginid(username);
+		List<CustomerAccountInfo> customerAccountInfos = customerAccountInfoRepository.findAllByCustomerId(login.get());
+		//List<CustomerAccountInfoVO> customerAccountInfoVOs = new ArrayList<CustomerAccountInfoVO>();
+		return customerAccountInfos.stream().map(tt -> {
+			CustomerAccountInfoVO customerAccountInfoVO = new CustomerAccountInfoVO();
+			BeanUtils.copyProperties(tt, customerAccountInfoVO);
+			return customerAccountInfoVO;
+		}).collect(Collectors.toList());
+	
+	}
+}

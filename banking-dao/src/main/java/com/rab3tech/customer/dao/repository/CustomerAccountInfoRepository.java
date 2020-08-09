@@ -1,6 +1,7 @@
 
 package com.rab3tech.customer.dao.repository;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -13,6 +14,8 @@ public interface CustomerAccountInfoRepository extends JpaRepository<CustomerAcc
 	public CustomerAccountInfo findByCustomerId(Login customerId);
 
 	public Optional<CustomerAccountInfo> findByAccountNumber(String accountNo);
+
+	public List<CustomerAccountInfo> findAllByCustomerId(Login login);
 
 
 }

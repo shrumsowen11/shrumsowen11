@@ -104,7 +104,7 @@ public class CustomerEnquiryServiceImplTest {
 			boolean result=customerEnquiryServiceImpl.emailNotExist("cubic@gmail.com");
 			assertTrue(result);
 	   	    verify(customerAccountEnquiryRepository, times(1)).findByEmail("cubic@gmail.com");
-		   verifyNoMoreInteractions(customerAccountEnquiryRepository);
+		    verifyNoMoreInteractions(customerAccountEnquiryRepository);
 	}
 
 	@Test
