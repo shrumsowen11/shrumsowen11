@@ -60,7 +60,8 @@
 					<input type="hidden"  name="customerId" id="customerId"  class="form-control"/> 
 				
 					<label for="payeeId" ><b>Select Beneficiary:</b></label> 
-					<select class="form-control" name="payeeId" id = "payeeId">
+					<select class="form-control" name="payeeId" id = "payeeId" required>
+					<option value = "" selected disabled> Select Beneficiary Name </option>
 					<option th:each="beneficiary : ${payeeList}" th:value="${beneficiary.id}" th:text="${beneficiary.payeeNickName}"></option>
 					
 					</select> 

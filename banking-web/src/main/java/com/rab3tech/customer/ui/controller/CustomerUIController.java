@@ -7,17 +7,15 @@ import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.rab3tech.customer.dao.repository.PayeeInfoRepository;
 import com.rab3tech.customer.service.AddressService;
 import com.rab3tech.customer.service.CustomerAccountService;
 import com.rab3tech.customer.service.CustomerEnquiryService;
@@ -26,14 +24,10 @@ import com.rab3tech.customer.service.FundTransferService;
 import com.rab3tech.customer.service.LoginService;
 import com.rab3tech.customer.service.PayeeInfoService;
 import com.rab3tech.customer.service.SecurityQuestionService;
-import com.rab3tech.dao.entity.AccountType;
-import com.rab3tech.dao.entity.CustomerSavingApproved;
 import com.rab3tech.email.service.EmailService;
-import com.rab3tech.vo.AccountTypeVO;
 import com.rab3tech.vo.AddressVO;
 import com.rab3tech.vo.ChangePasswordVO;
 import com.rab3tech.vo.CustomerAccountInfoVO;
-import com.rab3tech.vo.CustomerSavingApprovedVO;
 import com.rab3tech.vo.CustomerSavingVO;
 import com.rab3tech.vo.CustomerSecurityQueAnsVO;
 import com.rab3tech.vo.CustomerVO;
@@ -41,6 +35,7 @@ import com.rab3tech.vo.EmailVO;
 import com.rab3tech.vo.FundTransferVO;
 import com.rab3tech.vo.LoginVO;
 import com.rab3tech.vo.PayeeInfoVO;
+import com.rab3tech.vo.RequestVO;
 import com.rab3tech.vo.SecurityQuestionsVO;
 
 /**
@@ -304,12 +299,17 @@ public class CustomerUIController {
 		return "redirect:/customer/showBeneficiaries";
 	}
 
-	@PostMapping("/customers/editPayee")
-	public String editPayee(@ModelAttribute PayeeInfoVO payeeInfoVO, HttpSession session, Model model) {
+	@PostMapping("/customer/editPayee")
+	public String editPayee(@ModelAttribute PayeeInfoVO payeeInfoVO,RedirectAttributes attributes, HttpSession session, Model model) {
 		logger.info("editPayee is called!!!");
 		LoginVO loginVO = (LoginVO) session.getAttribute("userSessionVO");
+		String message = null;
 		if (loginVO != null) {
-			payeeInfoService.updatePayeeInfo(payeeInfoVO);
+			payeeInfoVO.setCustomerId(loginVO.getUsername());
+			message = payeeInfoService.updatePayeeInfo(payeeInfoVO);
+			attributes.addFlashAttribute("message", message);	
+		}else {
+			attributes.addFlashAttribute("error", "Please login again.");	
 		}
 		return "redirect:/customer/showBeneficiaries";
 	}
@@ -326,9 +326,7 @@ public class CustomerUIController {
 	@GetMapping("/customer/addBeneficiary")
 	public String addBeneficiary(HttpSession session, Model model) {
 		LoginVO loginVO2 = (LoginVO) session.getAttribute("userSessionVO");
-		boolean customerAccountExist = customerAccountService
-				.getCustomerAccountApprovedByUsername(loginVO2.getUsername());
-
+		boolean customerAccountExist = customerAccountService.getCustomerAccountApprovedByUsername(loginVO2.getUsername());
 		String viewName = "/customer/dashboard";
 		if (customerAccountExist) {
 			// Setting the customerId to the PayeeInfoVO before passing it to the Model
@@ -346,8 +344,7 @@ public class CustomerUIController {
 	public String addBeneficiaryPost(@ModelAttribute PayeeInfoVO payeeInfoVO, HttpSession session, Model model) {
 		LoginVO loginVO2 = (LoginVO) session.getAttribute("userSessionVO");
 		String message = null;
-		boolean customerAccountExist = customerAccountService
-				.getCustomerAccountApprovedByUsername(loginVO2.getUsername());
+		boolean customerAccountExist = customerAccountService.getCustomerAccountApprovedByUsername(loginVO2.getUsername());
 		String viewName = "/customer/addBeneficiary";
 		// checking the customer who is trying to add the beneficiary has logged in or
 		// not
@@ -383,15 +380,15 @@ public class CustomerUIController {
 		logger.info("fundTransferPage is called!!!");
 		String viewName = "redirect:/customer/fundTransferPage";
 		LoginVO loginVO = (LoginVO) session.getAttribute("userSessionVO");
-		boolean customerAccountExist = customerAccountService
-				.getCustomerAccountApprovedByUsername(loginVO.getUsername());
+		boolean customerAccountExist = customerAccountService.getCustomerAccountApprovedByUsername(loginVO.getUsername());
 		if (!customerAccountExist) {
 			model.addAttribute("message", "Sorry, the fund transfer was not successful. Please try again.");
 		} else {
 			fundTransferVO.setCustomerId(loginVO.getUsername());
 			String message = fundTransferService.processFundTransfer(fundTransferVO);
+			
 			model.addAttribute("message", message);
-			viewName = "redirect:/customer/showBeneficiaries";
+			viewName = "/customer/dashboard";
 
 		}
 		return viewName;
@@ -403,7 +400,7 @@ public class CustomerUIController {
 		LoginVO loginVO = (LoginVO) session.getAttribute("userSessionVO");
 		String viewName = "customer/dashboard";
 		if (loginVO != null) {
-			List<FundTransferVO> transactionList = fundTransferService.findAllTransactions(loginVO.getUsername());
+			List<FundTransferVO> transactionList = fundTransferService.findAllTransactionsByUsername(loginVO.getUsername());
 			if (transactionList != null) {
 				
 				model.addAttribute("transactionList", transactionList);
@@ -437,6 +434,16 @@ public class CustomerUIController {
 		}
 		return viewName;
 	}
+	@PostMapping("/customer/raiseRequest")
+	public String raiseRequest(@ModelAttribute RequestVO requestVO, HttpSession session, Model model) {
+		logger.info("addressUpdate is called!!!");
+		LoginVO loginVO = (LoginVO) session.getAttribute("userSessionVO");
+		if (loginVO != null) {
+		}
+		return null;
+		}
+			
+
 
 	@PostMapping("/customer/addressUpdate")
 	public String addressUpdate(@ModelAttribute AddressVO addressVO, HttpSession session, Model model) {

@@ -117,7 +117,7 @@ function deletePayee(JavaId) {
 	
 	
 	
-	//when directly deleting the datas from the DataBase itself, if you want to a=only hide the data in the client side, use upper method
+	//when directly deleting the datas from the DataBase itself, if you want to only hide the data in the client side, use upper method
 	/* window.location.href="http://localhost:999/customers/deletePayee?payeeAccountNo="+ac; */
 }
 
@@ -205,7 +205,7 @@ function deletePayee(JavaId) {
       <div class="modal-content">
         <!-- Modal Header -->
         
-      <form action="#" method="post"  th:action="@{/customers/editPayee}" th:object="${payeeInfoVO}">
+      <form action="#" method="post"  th:action="@{/customer/editPayee}" th:object="${payeeInfoVO}">
         <div class="modal-header">
           <h4 class="modal-title">Edit Beneficiary Information</h4>
           <button type="button" class="close" data-dismiss="modal">&times;</button>
@@ -224,7 +224,6 @@ function deletePayee(JavaId) {
         	Beneficiary Nickname
             <input type="text" name="payeeNickName" id="payeeNickName" class="form-control" required>
         	<!--th:field="*{payeeInfoVO.payeeNickName}"   -->
-        	
         	Remarks
             <input type="text" name="remarks" class="form-control"  required placeholder = "Simple Beneficiary description">
         	<!-- th:field="*{payeeInfoVO.remarks}" -->

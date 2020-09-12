@@ -8,6 +8,6 @@ public interface FundTransferService {
 
 	String processFundTransfer(FundTransferVO fundTransferVO);
 
-	List<FundTransferVO> findAllTransactions(String username);
+	List<FundTransferVO> findAllTransactionsByUsername(String username);
 
 }

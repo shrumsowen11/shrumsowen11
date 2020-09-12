@@ -2,7 +2,6 @@
 package com.rab3tech.customer.service.impl;
 
 import java.sql.Timestamp;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -106,8 +105,8 @@ public class CustomerAccountServiceImpl implements CustomerAccountService {
 	}
 
 	@Override
-	public CustomerAccountInfoVO findByAccountNumber(String payeeAccountNo) {
-		Optional<CustomerAccountInfo> optional = customerAccountInfoRepository.findByAccountNumber(payeeAccountNo);
+	public CustomerAccountInfoVO findByAccountNumber(String accountNumber) {
+		Optional<CustomerAccountInfo> optional = customerAccountInfoRepository.findByAccountNumber(accountNumber);
 		CustomerAccountInfoVO customerAccountInfoVO = new CustomerAccountInfoVO();
 		if (optional.isPresent()) {
 			BeanUtils.copyProperties(optional.get(), customerAccountInfoVO);

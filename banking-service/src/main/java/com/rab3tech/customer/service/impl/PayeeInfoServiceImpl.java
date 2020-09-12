@@ -52,21 +52,46 @@ public class PayeeInfoServiceImpl implements PayeeInfoService {
 		return payeeInfoVO;
 	}
 
+	
+	
+	
 	@Override
-	public void updatePayeeInfo(PayeeInfoVO payeeInfoVO) {
-		Optional<PayeeInfo> payeeInfo = payeeInfoRepository.findById(payeeInfoVO.getId());
-		if(payeeInfo.isPresent()) {
-			//Copy.copyNonNullProperties(payeeInfoVO, payeeInfo);
-			PayeeInfo payeeInfo2 = payeeInfo.get();
-			payeeInfo2.setPayeeAccountNo(payeeInfoVO.getPayeeAccountNo());
-			payeeInfo2.setPayeeName(payeeInfoVO.getPayeeName());
-			payeeInfo2.setPayeeNickName(payeeInfoVO.getPayeeNickName());
-			payeeInfo2.setRemarks(payeeInfoVO.getRemarks());
-			payeeInfo2.setDom(new Timestamp(new Date().getTime()));
+	public String updatePayeeInfo(PayeeInfoVO payeeInfoVO) {
+		String message = null;
+		Optional<CustomerAccountInfo> payeeAccountInfo = customerAccountInfoRepository.findByAccountNumber(payeeInfoVO.getPayeeAccountNo());
+
+		// checking the beneficiary account is in good standing or not
+		if (payeeAccountInfo.isEmpty()) {
+			message = "Sorry, Beneficiary account number invalid.";
+			return message;
 		}
-		payeeInfoRepository.save(payeeInfo.get());
+
+		// checking the beneficiary nicknames in the customer themselves is
+		// duplicate or not
+		// instead of doing this check, customerId of logging customer and passed nickname, if that is in dB then reject 
+		Optional<PayeeInfo> payeeInfo = payeeInfoRepository.findBeneficiaryByNickname(payeeInfoVO.getCustomerId(), payeeInfoVO.getPayeeNickName());
+		if (payeeInfo.isPresent()) {
+			message = "Sorry, The beneficiary nickname already exist.";
+			return message;
+		}
+		
+		// We need this here, in order to get the Date of entry of the Payee (as this is the method for editing the payee)
+		Optional<PayeeInfo> payeeOptional = payeeInfoRepository.findByPayeeAccountNo(payeeInfoVO.getPayeeAccountNo());
+
+		//if everything is good
+		payeeInfoVO.setDoe(payeeOptional.get().getDoe());
+		payeeInfoVO.setDom(new Timestamp(new Date().getTime()));
+	
+		PayeeInfo payeeInfo2 = new PayeeInfo();
+		BeanUtils.copyProperties(payeeInfoVO, payeeInfo2);
+		message = "Your Beneficiary is added successfully.";
+		payeeInfoRepository.save(payeeInfo2);
+		return message;
 	}
 
+	
+	
+	
 	@Override
 	public String addPayee(PayeeInfoVO payeeInfoVO) {
 		String message = null;

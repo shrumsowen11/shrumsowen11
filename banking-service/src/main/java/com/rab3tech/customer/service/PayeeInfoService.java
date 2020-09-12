@@ -11,7 +11,7 @@ public interface PayeeInfoService {
 
 	PayeeInfoVO findByPayeeAccountNo(String payeeAccountNo);
 
-	void updatePayeeInfo(PayeeInfoVO payeeInfoVO);
+	String updatePayeeInfo(PayeeInfoVO payeeInfoVO);
 
 	String addPayee(PayeeInfoVO payeeInfoVO);
 

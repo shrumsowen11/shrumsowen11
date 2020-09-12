@@ -32,5 +32,7 @@ public interface PayeeInfoRepository extends JpaRepository<PayeeInfo, Integer>{
 	void deleteByPayeeAccountNo(String payeeAccountNo);
 
 	
+
+	
 	
 }

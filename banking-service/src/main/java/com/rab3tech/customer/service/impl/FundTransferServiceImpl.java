@@ -59,10 +59,12 @@ public class FundTransferServiceImpl implements FundTransferService {
 			return message;
 		}
 		PayeeInfo payeeInfo = payeeInfoRepository.findById(fundTransferVO.getPayeeId()).get();
-		//PayeeInfo payeeInfo = payeeInfoRepository.findById(fundTransferVO.getPayee().getId());
+		// PayeeInfo payeeInfo =
+		// payeeInfoRepository.findById(fundTransferVO.getPayee().getId());
 
 		CustomerAccountInfo payeeCustomerAccount = customerAccountInfoRepository
 				.findByAccountNumber(payeeInfo.getPayeeAccountNo()).get();
+
 		// checking the beneficiary account is in good standing or not
 		if (payeeCustomerAccount == null) {
 			message = "Sorry, Beneficiary account number invalid. Contact bank.";
@@ -96,42 +98,39 @@ public class FundTransferServiceImpl implements FundTransferService {
 	}
 
 	@Override
-	public List<FundTransferVO> findAllTransactions(String username) {
+	public List<FundTransferVO> findAllTransactionsByUsername(String username) {
 		Optional<Login> login = loginRepository.findByLoginid(username);
 		CustomerAccountInfo loginCustomerAccount = new CustomerAccountInfo();
-		List<FundTransferVO> transactionListVO = new ArrayList<FundTransferVO>();
-		FundTransferVO fundTransferVO = new FundTransferVO();
+		List<FundTransferVO> fundTransferVOList = new ArrayList<FundTransferVO>();
 		if (login.isPresent()) {
 			Login loginDetails = login.get();
 			loginCustomerAccount = customerAccountInfoRepository.findByCustomerId(loginDetails);
-			List<FundTransfer> transactionList = fundTransferRepository
-					.getAllTransaction(loginCustomerAccount.getAccountNumber());
-			for (FundTransfer transaction : transactionList) {
+			List<FundTransfer> fundTransferList = fundTransferRepository.getAllTransaction(loginCustomerAccount.getAccountNumber());
+			for (FundTransfer transaction : fundTransferList) {
+				FundTransferVO fundTransferVO = new FundTransferVO();
 				fundTransferVO.setAmount(transaction.getAmount());
 				fundTransferVO.setDescription(transaction.getDescription());
 				fundTransferVO.setPayeeId(transaction.getPayeeId().getId());
 				fundTransferVO.setTransactionDate(transaction.getTransactionDate());
-				
-				if(transaction.getDebitAccountNo().equals(loginCustomerAccount.getAccountNumber()))
-				{
+
+				if (transaction.getDebitAccountNo().equals(loginCustomerAccount.getAccountNumber())) {
 					fundTransferVO.setTransactionType("Debit");
-				}else {
+				} else {
 					fundTransferVO.setTransactionType("Credit");
 				}
-				
 				PayeeInfoVO payeeVO = new PayeeInfoVO();
 				BeanUtils.copyProperties(transaction.getPayeeId(), payeeVO);
 				fundTransferVO.setPayee(payeeVO);
-				transactionListVO.add(fundTransferVO);
-				System.out.println(fundTransferVO +"\n ");
+				fundTransferVO.setPayeeId(payeeVO.getId());
 				
+				fundTransferVOList.add(fundTransferVO);
+				
+				//System.out.println(fundTransferVO + "\n ");
 			}
-		}else {
-			transactionListVO = null;
+			
+			return fundTransferVOList;
 		}
-		for(FundTransferVO t:transactionListVO) {
-		System.out.println(t);
-		}
-		return transactionListVO;
+
+		return null;
 	}
 }

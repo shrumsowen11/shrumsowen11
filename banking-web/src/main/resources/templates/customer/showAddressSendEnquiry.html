@@ -3,7 +3,7 @@
 	xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="utf-8" />
-<title>Check Request Page</title>
+<title>Check Request Enquiry</title>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet"
@@ -16,78 +16,98 @@
 	src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
 
 
+<script type="text/javascript">
+
+function confirmation(){
+	
+	var accountNumber = $("#customerAccountNo").val();
+	fetch("http://localhost:999/v3/customers/customerAccount/"+accountNumber)
+	.then(res => res.json()).then(data =>{
+		console.log(data);
+		$("#customerAccNo").val(accountNumber);
+		$("#firstName").html(data.firstName);
+		$("#lastName").html(data.lastName);
+		$("#mobile").html(data.mobile);
+		$("#address1").val(data.address1);
+		$("#address2").val(data.address2);
+		$("#city").val(data.city);
+		$("#zipcode").val(data.zipcode);
+		$("#country").val(data.country);
+		
+		$('#confirmationModal').modal('show');
+	});
+}
+</script>
+
 </head>
 
 <body>
 	<div th:insert="customer/header"></div> 
 <div class="container"> 
  <div th:insert="customer/nav"></div> 
-		<h3>Check Request Page</h3>
+		<h3>Check Request Enquiry</h3>
 		<br /> <span style="color: red; font-size: 18px;" id="message"></span>
-
-
-		<form>
-			<a th:href="@{/customer/editAddress}">
-				<button type="button" class="btn btn-primary">Edit Profile</button>
-			</a> <br />
-			<table class="table table-striped table-bordered "
-				style="color: black">
-				<tr>
-					<th>Name:</th>
-					<td th:text="${customerVO.name}"></td>
-				</tr>
-
-				<tr>
-					<th>Mobile:</th>
-					<td th:text="${customerVO.mobile}"></td>
-				</tr>
-
-				<tr>
-					<th>Email:</th>
-					<td th:text="${customerVO.email}"></td>
-				</tr>
-
-				<tr>
-					<th>Job Title:</th>
-					<td th:text="${customerVO.jobTitle}"></td>
-				</tr>
-
-				<tr>
-					<th>Address:</th>
-					<td th:text="${customerVO.address}"></td>
-				</tr>
-
-				<tr>
-					<th>SSN:</th>
-					<td th:text="${customerVO.ssn}"></td>
-				</tr>
-
-				<tr>
-					<th>Gender:</th>
-					<td th:text="${customerVO.gender}"></td>
-				</tr>
-
-				<tr>
-					<th>Father Name:</th>
-					<td th:text="${customerVO.father}"></td>
-				</tr>
-
-				<tr>
-					<th>Qualification:</th>
-					<td th:text="${customerVO.qualification}"></td>
-				</tr>
-
-
-				<tr>
-					<th>DOB:</th>
-					<td th:text="${customerVO.dob}"></td>
-				</tr>
-
-
-
-			</table>
-		</form>
+			<label for="chooseAccount"><b>Check Book Account Number:</b></label>
+					<select class="form-control" name="customerAccountNo" id="customerAccountNo" style = "width:50%" required>
+						<option value = "" selected disabled> Select Account Number </option>
+						<option th:each="customerAccountInfoVO : ${customerAccountInfoVOs}"
+							th:value="${customerAccountInfoVO.accountNumber}" th:text="${customerAccountInfoVO.accountNumber}"></option>
+					</select>
+					<br />	
+			<button type="button" class="btn btn-primary" onclick="confirmation();">Continue</button>
 	</div>
+
+<!-- The Modal -->
+  <div class="modal" id="confirmationModal">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <!-- Modal Header -->
+        
+      <form action="#" method="post"  th:action="@{/customer/raiseRequest}" th:object="${requestVO}">
+       
+        <div class="modal-header">
+          <h4 class="modal-title">Check Book Request</h4>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        
+        <!-- Modal body -->
+        <div class="modal-body">
+        
+        Check Book Account Number: 
+         <!-- <p style=" font-weight:bold" th:utext = "${customerAccNo}" > -->
+         
+                    <!--  <input type="text" name="payeeName" id="payeeName"  class="form-control" required> -->
+         
+          <!-- th:field="*{payeeInfoVO.payeeName}" -->
+        <p type="text" name="customerAccNo" id="customerAccNo" />
+        
+        
+        
+        Address Below:
+        <p th:text = "${firstName}"  name="firstName" id="firstName">
+                <p th:text = "${lastName}"  name="lastName" id="lastName">
+        		
+        <p th:utext = "${firstName} + ' ' + ${lastName}" /> 
+        <p th:utext = "${address1} + ', ' + ${address2}" /> 
+        <p th:utext = "${city} + ' ' + ${zipcode} + ', ' + ${country}" />
+        <p th:utext = "${mobile}" />      
+       
+        Request Description:
+        <input type="text" name="description" class="form-control">
+        
+        </div>
+        
+        <!-- Modal footer -->
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-success">Confirm</button>
+          <button type="reset" class="btn btn-danger">Reset</button>
+          
+        </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
 
 </body>
 </html>

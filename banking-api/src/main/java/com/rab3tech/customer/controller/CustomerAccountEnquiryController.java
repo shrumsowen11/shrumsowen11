@@ -2,9 +2,6 @@ package com.rab3tech.customer.controller;
 
 import java.util.List;
 
-import javax.servlet.http.HttpServletRequest;
-
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -13,7 +10,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.rab3tech.customer.service.CustomerEnquiryService;
@@ -36,9 +32,7 @@ public class CustomerAccountEnquiryController {
 	
 	@Autowired
 	private PayeeInfoService payeeInfoService;
-	
-	
-	
+
 	
 	//we have four methods to write inside the RestAPI
 	//  POST, GET, PUT, PATCH, and DELETE. 
@@ -65,19 +59,21 @@ public class CustomerAccountEnquiryController {
 	}
 	*/
 	
-	
+	/////**************************** This below method is not complete *****************************////////
 	@PostMapping("/customers/editPayee")
 	public ApplicationResponseVO editPayee(@RequestBody PayeeIdVO payeeIdVO) {
 		ApplicationResponseVO applicationResponseVO = new ApplicationResponseVO();
 	
 		//payeeInfoService.updatePayeeInfo(payeeIdVO);
 		applicationResponseVO.setCode(200);
-		applicationResponseVO.setMessage("Delete successful.");
+		applicationResponseVO.setMessage("Edit successful.");
 		return applicationResponseVO;
 		
 	}
+	/////**************************** This above method is not complete *****************************////////
+
 	
-		
+	
 	
 	
 	@PostMapping("/customers/enquiry")
