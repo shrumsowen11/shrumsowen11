@@ -142,3 +142,16 @@ Renaming the current branch:
 	git branch -M <new_name>
 
 
+how do I clone from the a specific branch in github;
+Cloning a specific branch in github
+
+	git clone --branch <branchname> --single-branch <remote-repo-url>
+or
+
+	git clone -b <branchname> --single-branch <remote-repo-url>
+For example: if   
+branchname → passwordless-auth; 
+remote-repo-url → https://github.com/shrumsowen11/shrumsowen11.git
+	
+	git clone -b passwordless-auth --single-branch https://github.com/shrumsowen11/shrumsowen11.git
+	
