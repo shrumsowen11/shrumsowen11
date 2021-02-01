@@ -4,13 +4,13 @@ Navicat MySQL Data Transfer
 Source Server         : LOCA
 Source Server Version : 50726
 Source Host           : localhost:3306
-Source Database       : cubic300_bank
+Source Database       : cubic_bank
 
 Target Server Type    : MYSQL
 Target Server Version : 50726
 File Encoding         : 65001
 
-Date: 2020-04-26 21:34:36
+Date: 2020-06-09 10:33:47
 */
 
 SET FOREIGN_KEY_CHECKS=0;
